@@ -1,19 +1,14 @@
 from flask import Flask
-import firebase_admin
-from firebase_admin import credentials, firestore
+from config import Config
+from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import os
 
-firebase_key = os.environ.get('FIREBASE_KEY')
-credential = credentials.Certificate(firebase_key)
-firebase_admin.initialize_app(credential)
-db = firestore.client()
-
+db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(Config)
     CORS(app)   
-    from app.controllers.user_controller import users_bp
+    db.init_app(app)
     from app.controllers.task_controller import tasks_bp
-    app.register_blueprint(users_bp, url_prefix='/api/users')
-    app.register_blueprint(tasks_bp, url_prefix='/api/tasks')
+    app.register_blueprint(tasks_bp)
     return app
