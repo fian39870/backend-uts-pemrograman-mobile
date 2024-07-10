@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_from_directory
 from app import db
 from app.model.task_model import Task
 
@@ -7,8 +7,11 @@ tasks_bp = Blueprint('tasks', __name__)
 def get_all_tasks():
     try:
         tasks = Task.query.all()
+        
         tasks_list = []
         for task in tasks:
+            picture_url = task.user.picture.strip()
+            image_url = task.image.strip()
             tasks_list.append({
                 'id': task.id,
                 'user_id': task.user_id,
@@ -18,11 +21,12 @@ def get_all_tasks():
                 'reward': float(task.reward),  # Konversi ke float untuk JSON
                 'status': task.status,
                 'title': task.title,
+                'image': f"http://10.100.29.47:5000/static/images/{image_url}",
                 'user': {
                     'id': task.user.id,
                     'created_at': task.user.created_at.strftime('%Y-%m-%d %H:%M:%S'),  # Format tanggal sesuai kebutuhan
                     'email': task.user.email,
-                    'picture': task.user.picture,
+                    'picture': f"http://10.100.29.47:5000/static/images/{picture_url}",
                     'rating': float(task.user.rating) if task.user.rating is not None else None,
                     'username': task.user.username
                 }
@@ -30,3 +34,4 @@ def get_all_tasks():
         return jsonify({'tasks': tasks_list}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+

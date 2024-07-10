@@ -10,4 +10,5 @@ class Task(db.Model):
     reward = db.Column(db.Numeric(10, 2))
     status = db.Column(db.Enum('assigned', 'completed', name='task_status'), nullable=False)
     title = db.Column(db.String(255))
+    image = db.Column(db.String(255))
     user = db.relationship('User', backref='tasks')
