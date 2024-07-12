@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, send_from_directory
+from flask import Blueprint, jsonify, request, current_app
 from app import db
 from app.model.task_model import Task
 
@@ -22,12 +22,12 @@ def get_all_tasks():
                 'reward': float(task.reward),  # Konversi ke float untuk JSON
                 'status': task.status,
                 'title': task.title,
-                'image': f"http://{base_url} :5000/static/images/{image_url}",
+                'image': f"http://{base_url}:5000/static/images/{image_url}",
                 'user': {
                     'id': task.user.id,
                     'created_at': task.user.created_at.strftime('%Y-%m-%d %H:%M:%S'),  # Format tanggal sesuai kebutuhan
                     'email': task.user.email,
-                    'picture': f"{base_url}/static/images/{picture_url}",
+                    'picture': f"http://{base_url}:5000/static/images/{picture_url}",
                     'rating': float(task.user.rating) if task.user.rating is not None else None,
                     'username': task.user.username
                 }
