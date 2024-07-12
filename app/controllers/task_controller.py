@@ -13,6 +13,7 @@ def get_all_tasks():
         for task in tasks:
             picture_url = task.user.picture.strip()
             image_url = task.image.strip()
+            image_detail = task.image_detail.strip()
             tasks_list.append({
                 'id': task.id,
                 'user_id': task.user_id,
@@ -23,6 +24,7 @@ def get_all_tasks():
                 'status': task.status,
                 'title': task.title,
                 'image': f"http://{base_url}:5000/static/images/{image_url}",
+                'image_detail': f"http://{base_url}:5000/static/images/{image_detail}",
                 'user': {
                     'id': task.user.id,
                     'created_at': task.user.created_at.strftime('%Y-%m-%d %H:%M:%S'),  # Format tanggal sesuai kebutuhan
